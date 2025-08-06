@@ -3,9 +3,9 @@ namespace Domain.Entities;
 public class UserFilterEntity
 {
     public Guid Id { get; set; }
-    public UserProfileEntity UserProfile { get; set; }
-    public Guid UserId { get; set; }
-
+    public Guid ProfileId { get; set; }
+    public UserProfileEntity Profile { get; set; }
+    
     public decimal? MinPrice { get; set; }
     public decimal? MaxPrice { get; set; }
 

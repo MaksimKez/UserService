@@ -2,7 +2,7 @@ using Domain.Abstractions.Repositories;
 
 namespace Domain.Abstractions;
 
-public interface IUnitOfWork : IDisposable
+public interface IUnitOfWork
 { 
     IUserFiltersRepository UserFilters { get; }
     IUserProfileRepository UserProfiles { get; }
