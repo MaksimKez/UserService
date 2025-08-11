@@ -15,6 +15,8 @@ public interface IUserFiltersRepository
     Task<List<UserFilterEntity>> ListAsync(
         ISpecification<UserFilterEntity> specification,
         CancellationToken cancellationToken = default);
+    
+    IAsyncEnumerable<UserFilterEntity> StreamAsync(ISpecification<UserFilterEntity> specification);
 
     Task AddAsync(UserFilterEntity entity, CancellationToken cancellationToken = default);
 

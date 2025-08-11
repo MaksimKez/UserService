@@ -50,6 +50,14 @@ public class UserFiltersRepository(UserServiceDbContext context, ILogger<UserFil
             .ToListAsync(cancellationToken);
     }
 
+    public IAsyncEnumerable<UserFilterEntity> StreamAsync(ISpecification<UserFilterEntity> specification)
+    {
+        logger.LogInformation("Streaming UserProfileEntities by specification");
+        return ApplySpecification(specification)
+            .AsNoTracking()
+            .AsAsyncEnumerable();
+    }
+
     private IQueryable<UserFilterEntity> ApplySpecification(ISpecification<UserFilterEntity> spec)
         => SpecificationEvaluator.Default.GetQuery(filters.AsQueryable(), spec);
     
