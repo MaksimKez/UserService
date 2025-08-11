@@ -7,7 +7,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Persistence.Repositories;
 
-public class UserFiltersRepository(UserServiceDbContext context, ILogger<UserFiltersRepository> logger) : IUserFiltersRepository
+public class UserFiltersRepository(
+    UserServiceDbContext context,
+    ILogger<UserFiltersRepository> logger)
+    : IUserFiltersRepository
 {
     private readonly DbSet<UserFilterEntity> filters = context.Set<UserFilterEntity>();
 

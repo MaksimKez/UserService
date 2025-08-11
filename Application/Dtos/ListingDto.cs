@@ -2,6 +2,7 @@ namespace Application.Dtos;
 
 public class ListingDto
 {
+    public Guid Id { get; set; }
     public decimal Price { get; set; }
     public decimal AreaMeterSqr { get; set; }
     public int Rooms { get; set; }

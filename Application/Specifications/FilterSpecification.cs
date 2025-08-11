@@ -2,7 +2,7 @@ using Application.Dtos;
 using Ardalis.Specification;
 using Domain.Entities;
 
-namespace Persistence.Specifications;
+namespace Application.Specifications;
 
 public class FilterSpecification : Specification<UserFilterEntity>
 {
