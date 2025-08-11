@@ -5,16 +5,20 @@ namespace Domain.Abstractions.Repositories;
 
 public interface IUserFiltersRepository
 {
-    Task<UserFilterEntity?> GetByProfileIdAsync(Guid id);
-    Task<UserFilterEntity?> GetByIdAsync(Guid id);
+    Task<UserFilterEntity?> GetByProfileIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<UserFilterEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
     
-    Task<UserFilterEntity?> GetBySpecAsync(ISpecification<UserFilterEntity> specification);
+    Task<UserFilterEntity?> GetBySpecAsync(
+        ISpecification<UserFilterEntity> specification, 
+        CancellationToken cancellationToken = default);
 
-    Task<List<UserFilterEntity>> ListAsync(ISpecification<UserFilterEntity> specification);
+    Task<List<UserFilterEntity>> ListAsync(
+        ISpecification<UserFilterEntity> specification,
+        CancellationToken cancellationToken = default);
 
-    Task AddAsync(UserFilterEntity entity);
+    Task AddAsync(UserFilterEntity entity, CancellationToken cancellationToken = default);
 
-    Task UpdateAsync(UserFilterEntity entity);
+    void Update(UserFilterEntity entity);
 
-    Task DeleteAsync(UserFilterEntity entity);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }

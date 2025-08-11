@@ -1,43 +1,82 @@
 using Ardalis.Specification;
+using Ardalis.Specification.EntityFrameworkCore;
 using Domain.Abstractions.Repositories;
 using Domain.Entities;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Logging;
 
 namespace Persistence.Repositories;
 
-public class UserFiltersRepository : IUserFiltersRepository
+public class UserFiltersRepository(UserServiceDbContext context, ILogger<UserFiltersRepository> logger) : IUserFiltersRepository
 {
-    public Task<UserFilterEntity?> GetByProfileIdAsync(Guid id)
+    private readonly DbSet<UserFilterEntity> filters = context.Set<UserFilterEntity>();
+
+    public async Task<UserFilterEntity?> GetByProfileIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Getting UserFilterEntity by ProfileId {ProfileId}", id);
+        var entity = await filters.FirstOrDefaultAsync(filter => filter.ProfileId == id, cancellationToken);
+        if (entity == null)
+            logger.LogWarning("UserFilterEntity with ProfileId {ProfileId} not found", id);
+        return entity;
     }
 
-    public Task<UserFilterEntity?> GetByIdAsync(Guid id)
+    public async Task<UserFilterEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Getting UserFilterEntity by Id {Id}", id);
+        var entity = await filters.FindAsync(new object[] { id }, cancellationToken);
+        if (entity == null)
+            logger.LogWarning("UserFilterEntity with Id {Id} not found", id);
+        return entity;
     }
 
-    public Task<UserFilterEntity?> GetBySpecAsync(ISpecification<UserFilterEntity> specification)
+    public async Task<UserFilterEntity?> GetBySpecAsync(
+        ISpecification<UserFilterEntity> specification,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Getting UserFilterEntity by specification");
+        var entity = await ApplySpecification(specification).FirstOrDefaultAsync(cancellationToken);
+        if (entity == null)
+            logger.LogWarning("UserFilterEntity matching specification not found");
+        return entity;
     }
 
-    public Task<List<UserFilterEntity>> ListAsync(ISpecification<UserFilterEntity> specification)
+    public async Task<List<UserFilterEntity>> ListAsync(
+        ISpecification<UserFilterEntity> specification,
+        CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Listing UserFilterEntities by specification");
+        return await ApplySpecification(specification)
+            .AsNoTracking()
+            .ToListAsync(cancellationToken);
     }
 
-    public Task AddAsync(UserFilterEntity entity)
+    private IQueryable<UserFilterEntity> ApplySpecification(ISpecification<UserFilterEntity> spec)
+        => SpecificationEvaluator.Default.GetQuery(filters.AsQueryable(), spec);
+    
+    public async Task AddAsync(UserFilterEntity entity, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
+        logger.LogInformation("Adding new UserFilterEntity with ProfileId {ProfileId}", entity.ProfileId);
+        await filters.AddAsync(entity, cancellationToken);
+    }
+    
+    public void Update(UserFilterEntity entity)
+    {
+        logger.LogInformation("Updating UserFilterEntity with Id {Id}", entity.Id);
+        filters.Update(entity);
     }
 
-    public Task UpdateAsync(UserFilterEntity entity)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken)
     {
-        throw new NotImplementedException();
-    }
+        logger.LogInformation("Deleting UserFilterEntity with Id {Id}", id);
+        var entity = await filters.FindAsync(new object[] { id }, cancellationToken);
+        if (entity is null)
+        {
+            logger.LogWarning("Attempt to delete UserFilterEntity with Id {Id}, but it was not found.", id);
+            return;
+        }
 
-    public Task DeleteAsync(UserFilterEntity entity)
-    {
-        throw new NotImplementedException();
+        filters.Remove(entity);
+        await context.SaveChangesAsync(cancellationToken);
+        logger.LogInformation("UserFilterEntity with Id {Id} was successfully deleted.", id);
     }
 }

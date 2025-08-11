@@ -27,9 +27,3 @@ public class FilterSpecification : Specification<UserFilterEntity>
     }
 }
 
-
-
-
-
-
-//temp
