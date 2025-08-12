@@ -11,6 +11,8 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IUserFilterService, UserFilterService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
         
+        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        
         return services;
     }
 }

@@ -6,6 +6,6 @@ public class AddUserProfileRequest
     public string Name { get; set; }
     public string LastName { get; set; }
     public string Email { get; set; }
-    public string PreferredLanguage { get; set; } = "EN";
+    public string? PreferredLanguage { get; set; } = "EN";
     
 }

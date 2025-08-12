@@ -21,7 +21,7 @@ public interface IUserFilterService
 
     Task<Result> Update(UpdateFilterRequest entity);
 
-    Task<Result> DeleteAsync(Guid id);
+    Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }
 
 //get
