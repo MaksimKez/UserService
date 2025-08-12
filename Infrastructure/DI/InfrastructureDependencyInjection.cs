@@ -1,4 +1,4 @@
-using Application.Abstractions.AuthServiceClient;
+using Application.Abstractions.NotificationServiceClient;
 using Infrastructure.AuthServiceClient;
 using Microsoft.Extensions.DependencyInjection;
 

@@ -1,5 +1,4 @@
 using Application.Abstractions;
-using Application.Abstractions.AuthServiceClient;
 using Application.Dtos;
 using Application.Dtos.Requests;
 using Application.Specifications;

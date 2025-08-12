@@ -1,8 +1,7 @@
 using Application.Dtos;
-using Domain.Entities;
 using Domain.Results;
 
-namespace Application.Abstractions.AuthServiceClient;
+namespace Application.Abstractions.NotificationServiceClient;
 
 public interface INotificationServiceClient
 {

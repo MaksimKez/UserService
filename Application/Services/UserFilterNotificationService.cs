@@ -1,5 +1,5 @@
 using Application.Abstractions;
-using Application.Abstractions.AuthServiceClient;
+using Application.Abstractions.NotificationServiceClient;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Dtos;
 using Application.Specifications;
