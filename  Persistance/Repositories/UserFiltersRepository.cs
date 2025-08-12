@@ -26,7 +26,7 @@ public class UserFiltersRepository(
     public async Task<UserFilterEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken)
     {
         logger.LogInformation("Getting UserFilterEntity by Id {Id}", id);
-        var entity = await filters.FindAsync(new object[] { id }, cancellationToken);
+        var entity = await filters.FindAsync([id], cancellationToken);
         if (entity == null)
             logger.LogWarning("UserFilterEntity with Id {Id} not found", id);
         return entity;

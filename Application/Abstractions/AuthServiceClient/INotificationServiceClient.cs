@@ -1,15 +1,16 @@
 using Application.Dtos;
 using Application.Results;
+using Domain.Entities;
 
 namespace Application.Abstractions.AuthServiceClient;
 
-public interface IAuthServiceClient
+public interface INotificationServiceClient
 {
     Task<Result> NotifyUserAsync(
-        Guid userId,
+        UserDto userDto,
         ListingDto matchingListing,
         CancellationToken cancellationToken = default);
     Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(
-        Dictionary<Guid, ListingDto> userIdToListingDtos,
+        Dictionary<UserDto, ListingDto> userIdToListingDtos,
         CancellationToken cancellationToken = default);
 }

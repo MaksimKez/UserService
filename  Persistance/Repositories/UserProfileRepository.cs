@@ -20,6 +20,16 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
             logger.LogWarning("UserProfileEntity with Id {Id} not found", id);
         return entity;
     }
+
+    public async Task<UserProfileEntity?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
+    {
+        logger.LogInformation("Getting UserProfileEntity by Email {Email}", email);
+        var entity = await profiles.FindAsync([email], cancellationToken);
+        if (entity == null) 
+            logger.LogWarning("UserProfileEntity with Email {Email} not found", email);
+        return entity;
+    }
+
     public async Task<UserProfileEntity?> GetBySpecAsync(
         ISpecification<UserProfileEntity> specification,
         CancellationToken cancellationToken = default)
@@ -63,11 +73,19 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
         profiles.Update(entity);
     }
 
-    public async Task DeleteAsync(UserProfileEntity entity, CancellationToken cancellationToken = default)
+    public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
-        logger.LogInformation("Deleting UserProfileEntity with Id {Id}", entity.Id);
+        logger.LogInformation("Deleting UserProfile with Id {Id}", id);
+        var entity = await profiles.FindAsync(new object[] { id }, cancellationToken);
+        if (entity is null)
+        {
+            logger.LogWarning("Attempt to delete UserProfile with Id {Id}, but it was not found.", id);
+            return;
+        }
+
         profiles.Remove(entity);
         await context.SaveChangesAsync(cancellationToken);
-        logger.LogInformation("UserProfileEntity with Id {Id} was successfully deleted.", entity.Id);
+        logger.LogInformation("UserProfile with Id {Id} was successfully deleted.", id);
+
     }
 }

@@ -1,3 +1,4 @@
+using System.Security.AccessControl;
 using Application.Abstractions;
 using Application.Abstractions.AuthServiceClient;
 using Application.Dtos;
@@ -11,7 +12,7 @@ namespace Application.Services;
 
 public class UserFilterService(
     IUnitOfWork uow,
-    IAuthServiceClient authServiceClient,
+    INotificationServiceClient notificationServiceClient,
     ILogger<UserFilterService> logger)
     : IUserFilterService
 {
@@ -91,7 +92,14 @@ public class UserFilterService(
 
             logger.LogInformation("Notifying user with profile id {id}", filter.ProfileId);
 
-            var result = await authServiceClient.NotifyUserAsync(filter.ProfileId, listing, cancellationToken);
+            var result = await notificationServiceClient.NotifyUserAsync(new UserDto()
+            {
+                Id = filter.ProfileId,
+                Email = filter.Profile.Email,
+                Name = filter.Profile.FirstName,
+                LastName = filter.Profile.LastName,
+                TelegramId = null //temp
+            }, listing, cancellationToken);
 
             if (result.IsSuccess)
             {
@@ -111,7 +119,7 @@ public class UserFilterService(
     {
         logger.LogInformation("Notify users for multiple ListingDtos");
 
-        var userToListing = new Dictionary<Guid, ListingDto>();
+        var userToListing = new Dictionary<UserDto, ListingDto>();
 
         foreach (var listing in listings)
         {
@@ -124,7 +132,14 @@ public class UserFilterService(
                 {
                     continue;
                 }
-                userToListing[filter.ProfileId] = listing;
+                userToListing[new UserDto
+                {
+                    Id = filter.ProfileId,
+                    Email = filter.Profile.Email,
+                    Name = filter.Profile.FirstName,
+                    LastName = filter.Profile.LastName,
+                    TelegramId = null //temp
+                }] = listing;
             }
         }
 
@@ -133,8 +148,9 @@ public class UserFilterService(
             logger.LogInformation("No users found to notify for listings");
             return Result<Dictionary<Guid, string>>.Success(new Dictionary<Guid, string>());
         }
+        
 
-        var sendResult = await authServiceClient.NotifyUsersAsync(userToListing, cancellationToken);
+        var sendResult = await notificationServiceClient.NotifyUsersAsync(userToListing, cancellationToken);
         var unnotifiedErrors = sendResult.IsSuccess ? new Dictionary<Guid, string>() : sendResult.Value ?? new();
 
         foreach (var (userId, error) in unnotifiedErrors)
@@ -144,9 +160,9 @@ public class UserFilterService(
 
         if (sendResult.IsSuccess)
         {
-            foreach (var userId in userToListing.Keys)
+            foreach (var user in userToListing.Keys)
             {
-                var filter = await uow.UserFilters.GetByProfileIdAsync(userId, cancellationToken);
+                var filter = await uow.UserFilters.GetByProfileIdAsync(user.Id, cancellationToken);
                 if (filter != null)
                 {
                     filter.Profile.LastNotifiedAt = DateTime.UtcNow;

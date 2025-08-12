@@ -12,8 +12,12 @@ public class UserProfileConfig : IEntityTypeConfiguration<UserProfileEntity>
 
         builder.HasKey(p => p.Id);
 
-        builder.HasIndex(p => p.PreferredLanguage);
-        builder.HasIndex(p => p.LastNotifiedAt);
+        builder.HasIndex(p => p.FirstName);
+        builder.HasIndex(p => p.Email);
+        
+        builder.Property(p => p.Email)
+            .IsRequired()
+            .HasMaxLength(256);
 
         builder.Property(p => p.FirstName)
             .IsRequired()

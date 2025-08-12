@@ -6,6 +6,7 @@ namespace Domain.Abstractions.Repositories;
 public interface IUserProfileRepository
 {
     Task<UserProfileEntity?> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<UserProfileEntity?> GetByEmailAsync(string email, CancellationToken cancellationToken = default);
     
     Task<UserProfileEntity?> GetBySpecAsync(
         ISpecification<UserProfileEntity> specification, 
@@ -21,5 +22,5 @@ public interface IUserProfileRepository
 
     void Update(UserProfileEntity entity);
 
-    Task DeleteAsync(UserProfileEntity entity, CancellationToken cancellationToken = default);
+    Task DeleteAsync(Guid id, CancellationToken cancellationToken = default);
 }
