@@ -14,29 +14,29 @@ using System.Threading.Tasks;
 [Route("api/[controller]")]
 public class FilterController(IUserFilterService userFilterService) : ControllerBase
 {
-    [HttpGet("{id:guid}")]
-    public async Task<IActionResult> GetById(Guid id, CancellationToken ct)
+    [HttpGet]
+    public async Task<IActionResult> GetById(Guid id)
     {
-        var result = await userFilterService.GetByIdAsync(id, ct);
+        var result = await userFilterService.GetByIdAsync(id);
         return result.IsSuccess ? Ok(result.Value) : NotFound(result.Errors);
     }
 
-    [HttpGet("by-profile/{profileId:guid}")]
-    public async Task<IActionResult> GetByProfileId(Guid profileId, CancellationToken ct)
+    [HttpGet("by-profile")]
+    public async Task<IActionResult> GetByProfileId(Guid profileId)
     {
-        var result = await userFilterService.GetByProfileIdAsync(profileId, ct);
+        var result = await userFilterService.GetByProfileIdAsync(profileId);
         return result.IsSuccess ? Ok(result.Value) : NotFound(result.Errors);
     }
 
     [HttpPost("list")]
-    public async Task<IActionResult> List([FromBody] ListingDto dto, CancellationToken ct)
+    public async Task<IActionResult> List([FromBody] ListingDto dto)
     {
-        var result = await userFilterService.ListAsync(dto, ct);
+        var result = await userFilterService.ListAsync(dto);
         return Ok(result.Value);
     }
 
     [HttpPost]
-    public async Task<IActionResult> AddDefault([FromQuery] Guid userId)
+    public async Task<IActionResult> AddDefault(Guid userId)
     {
         var id = await userFilterService.AddDefaultAsync(userId);
         return CreatedAtAction(nameof(GetById), new { id });
@@ -49,7 +49,7 @@ public class FilterController(IUserFilterService userFilterService) : Controller
         return result.IsSuccess ? NoContent() : BadRequest(result.Errors);
     }
 
-    [HttpDelete("{id:guid}")]
+    [HttpDelete]
     public async Task<IActionResult> Delete(Guid id)
     {
         var result = await userFilterService.DeleteAsync(id);

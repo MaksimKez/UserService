@@ -7,8 +7,8 @@ namespace Application.Abstractions;
 
 public interface IUserFilterService
 {
-    Task<Result<UserFilterEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken);
-    Task<Result<UserFilterEntity>> GetByProfileIdAsync(Guid profileId, CancellationToken cancellationToken);
+    Task<Result<UserFilterEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<UserFilterEntity>> GetByProfileIdAsync(Guid profileId, CancellationToken cancellationToken = default);
     Task<Result<List<UserFilterEntity>>> ListAsync(
         ListingDto matchingListing,
         CancellationToken cancellationToken = default);

@@ -76,7 +76,7 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
     public async Task DeleteAsync(Guid id, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Deleting UserProfile with Id {Id}", id);
-        var entity = await profiles.FindAsync(new object[] { id }, cancellationToken);
+        var entity = await profiles.FindAsync([id], cancellationToken);
         if (entity is null)
         {
             logger.LogWarning("Attempt to delete UserProfile with Id {Id}, but it was not found.", id);

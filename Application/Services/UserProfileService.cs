@@ -1,4 +1,5 @@
 using Application.Abstractions;
+using Application.Dtos.Requests;
 using Application.Results;
 using Domain.Abstractions;
 using Domain.Entities;
@@ -23,18 +24,36 @@ public class UserProfileService(IUnitOfWork uow) : IUserProfileService
             : Result<UserProfileEntity>.Success(entity);
     }
 
-    public async Task<Guid> AddDefaultAsync(UserProfileEntity entity, CancellationToken cancellationToken)
+    public async Task<Guid> AddAsync(AddUserProfileRequest request, CancellationToken cancellationToken)
     {
-        entity.PreferredLanguage = "EN";
-        entity.CreatedAt = DateTime.UtcNow;
-        entity.UpdatedAt = DateTime.UtcNow;
-        
+        var entity = new UserProfileEntity
+        {
+            Id = request.Id,
+            PreferredLanguage = request.PreferredLanguage,
+            CreatedAt = DateTime.UtcNow,
+            UpdatedAt = DateTime.UtcNow,
+            FirstName = request.Name,
+            LastName = request.LastName,
+            Email = request.Email,
+        };
+
         await uow.UserProfiles.AddAsync(entity, cancellationToken);
+        await uow.SaveChangesAsync(cancellationToken);
         return entity.Id;
     }
 
-    public async Task<Result> UpdateAsync(UserProfileEntity entity, CancellationToken cancellationToken)
+    public async Task<Result> UpdateAsync(UpdateProfileRequest request, CancellationToken cancellationToken)
     {
+        var entity = await uow.UserProfiles.GetByIdAsync(request.Id, cancellationToken);
+        if (entity is null)
+        {
+            return Result.Failure("User not found");
+        }
+        
+        entity.FirstName = request.Name;
+        entity.LastName = request.LastName;
+        entity.PreferredLanguage = request.PreferredLanguage;
+        
         uow.UserProfiles.Update(entity);
         await uow.SaveChangesAsync(cancellationToken);
         return Result.Success();
