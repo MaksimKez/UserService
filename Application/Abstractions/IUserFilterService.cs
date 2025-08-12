@@ -7,21 +7,12 @@ namespace Application.Abstractions;
 
 public interface IUserFilterService
 {
-    Task<Result<UserFilterEntity>> GetByIdAsync(Guid id, CancellationToken cancellationToken = default);
-    Task<Result<UserFilterEntity>> GetByProfileIdAsync(Guid profileId, CancellationToken cancellationToken = default);
-    Task<Result<List<UserFilterEntity>>> ListAsync(
-        ListingDto matchingListing,
-        CancellationToken cancellationToken = default);
-    
-    Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(ListingDto matchingListing, CancellationToken cancellationToken = default);
-    
-    Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(List<ListingDto> matchingListings, CancellationToken cancellationToken = default);
-    
-    Task<Guid> AddDefaultAsync(Guid userId, CancellationToken cancellationToken = default);
-
-    Task<Result> Update(UpdateFilterRequest entity);
-
-    Task<Result> DeleteAsync(Guid id, CancellationToken cancellationToken = default);
+    Task<Result<UserFilterEntity>> GetByIdAsync(Guid id, CancellationToken ct);
+    Task<Result<UserFilterEntity>> GetByProfileIdAsync(Guid profileId, CancellationToken ct);
+    Task<Result<List<UserFilterEntity>>> ListAsync(ListingDto listing, CancellationToken ct);
+    Task<Guid> AddDefaultAsync(Guid userId, CancellationToken ct);
+    Task<Result> UpdateAsync(UpdateFilterRequest request, CancellationToken ct);
+    Task<Result> DeleteAsync(Guid id, CancellationToken ct);
 }
 
 //get
