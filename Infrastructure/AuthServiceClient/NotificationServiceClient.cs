@@ -1,6 +1,6 @@
 using Application.Abstractions.AuthServiceClient;
 using Application.Dtos;
-using Application.Results;
+using Domain.Results;
 
 namespace Infrastructure.AuthServiceClient;
 

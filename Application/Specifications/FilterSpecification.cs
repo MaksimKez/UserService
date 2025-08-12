@@ -9,21 +9,20 @@ public class FilterSpecification : Specification<UserFilterEntity>
     public FilterSpecification(ListingDto listing)
     {
         Query.Where(f =>
-            (!f.MinPrice.HasValue || listing.Price >= f.MinPrice.Value) &&
-            (!f.MaxPrice.HasValue || listing.Price <= f.MaxPrice.Value) &&
-            (!f.MinAreaMeterSqr.HasValue || listing.AreaMeterSqr >= f.MinAreaMeterSqr.Value) &&
-            (!f.MaxAreaMeterSqr.HasValue || listing.AreaMeterSqr <= f.MaxAreaMeterSqr.Value) &&
-            (!f.MinRooms.HasValue || listing.Rooms >= f.MinRooms.Value) &&
-            (!f.MaxRooms.HasValue || listing.Rooms <= f.MaxRooms.Value) &&
-            (!f.MinFloor.HasValue || listing.Floor >= f.MinFloor.Value) &&
-            (!f.MaxFloor.HasValue || listing.Floor <= f.MaxFloor.Value) &&
-            (!f.IsFurnished.HasValue || listing.IsFurnished == f.IsFurnished.Value) &&
-            (!f.PetsAllowed.HasValue || listing.PetsAllowed == f.PetsAllowed.Value) &&
-            (!f.HasBalcony.HasValue || listing.HasBalcony == f.HasBalcony.Value) &&
-            (!f.HasAppliances.HasValue || listing.HasAppliances == f.HasAppliances.Value) &&
+            (!f.MinPrice.HasValue || f.MinPrice.Value <= listing.Price) &&
+            (!f.MaxPrice.HasValue || f.MaxPrice.Value >= listing.Price) &&
+            (!f.MinAreaMeterSqr.HasValue || f.MinAreaMeterSqr.Value <= listing.AreaMeterSqr) &&
+            (!f.MaxAreaMeterSqr.HasValue || f.MaxAreaMeterSqr.Value >= listing.AreaMeterSqr) &&
+            (!f.MinRooms.HasValue || f.MinRooms.Value <= listing.Rooms) &&
+            (!f.MaxRooms.HasValue || f.MaxRooms.Value >= listing.Rooms) &&
+            (!f.MinFloor.HasValue || f.MinFloor.Value <= listing.Floor) &&
+            (!f.MaxFloor.HasValue || f.MaxFloor.Value >= listing.Floor) &&
+            (!f.IsFurnished.HasValue || f.IsFurnished.Value == listing.IsFurnished) &&
+            (!f.PetsAllowed.HasValue || f.PetsAllowed.Value == listing.PetsAllowed) &&
+            (!f.HasBalcony.HasValue || f.HasBalcony.Value == listing.HasBalcony) &&
+            (!f.HasAppliances.HasValue || f.HasAppliances.Value == listing.HasAppliances) &&
             (!f.NewerThanDays.HasValue || 
              listing.CreatedAt >= DateTime.UtcNow.AddDays(-f.NewerThanDays.Value))
         );
     }
 }
-

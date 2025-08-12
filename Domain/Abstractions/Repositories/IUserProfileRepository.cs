@@ -1,5 +1,6 @@
 using Ardalis.Specification;
 using Domain.Entities;
+using Domain.Results;
 
 namespace Domain.Abstractions.Repositories;
 
@@ -18,7 +19,7 @@ public interface IUserProfileRepository
 
     IAsyncEnumerable<UserProfileEntity> StreamAsync(ISpecification<UserProfileEntity> specification);
 
-    Task AddAsync(UserProfileEntity entity, CancellationToken cancellationToken = default);
+    Task<Result<UserProfileEntity>> AddAsync(UserProfileEntity entity, CancellationToken cancellationToken = default);
 
     void Update(UserProfileEntity entity);
 

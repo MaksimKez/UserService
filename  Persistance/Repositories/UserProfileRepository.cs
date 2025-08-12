@@ -2,6 +2,7 @@ using Ardalis.Specification;
 using Ardalis.Specification.EntityFrameworkCore;
 using Domain.Abstractions.Repositories;
 using Domain.Entities;
+using Domain.Results;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Logging;
 
@@ -24,7 +25,7 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
     public async Task<UserProfileEntity?> GetByEmailAsync(string email, CancellationToken cancellationToken = default)
     {
         logger.LogInformation("Getting UserProfileEntity by Email {Email}", email);
-        var entity = await profiles.FindAsync([email], cancellationToken);
+        var entity = await profiles.FirstOrDefaultAsync(u => u.Email == email, cancellationToken);
         if (entity == null) 
             logger.LogWarning("UserProfileEntity with Email {Email} not found", email);
         return entity;
@@ -61,10 +62,17 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
     private IQueryable<UserProfileEntity> ApplySpecification(ISpecification<UserProfileEntity> spec)
         => SpecificationEvaluator.Default.GetQuery(profiles.AsQueryable(), spec);
 
-    public async Task AddAsync(UserProfileEntity entity, CancellationToken cancellationToken = default)
+    public async Task<Result<UserProfileEntity>> AddAsync(UserProfileEntity entity, CancellationToken cancellationToken = default)
     {
+        var existingUser = await GetByIdAsync(entity.Id, cancellationToken);
+        if (existingUser != null)
+        {
+            return Result<UserProfileEntity>.Failure("User already exists");
+        }
+        
         logger.LogInformation("Adding new UserProfileEntity with Id {Id}", entity.Id);
         await profiles.AddAsync(entity, cancellationToken);
+        return Result<UserProfileEntity>.Success(entity);
     }
 
     public void Update(UserProfileEntity entity)

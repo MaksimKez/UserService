@@ -1,6 +1,4 @@
-using Domain.Entities;
-
-namespace Application.Results;
+namespace Domain.Results;
 
 public class Result<TValue> where TValue : class
 {

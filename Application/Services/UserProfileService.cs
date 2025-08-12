@@ -1,8 +1,8 @@
 using Application.Abstractions;
 using Application.Dtos.Requests;
-using Application.Results;
 using Domain.Abstractions;
 using Domain.Entities;
+using Domain.Results;
 
 namespace Application.Services;
 
@@ -24,7 +24,7 @@ public class UserProfileService(IUnitOfWork uow) : IUserProfileService
             : Result<UserProfileEntity>.Success(entity);
     }
 
-    public async Task<Guid> AddAsync(AddUserProfileRequest request, CancellationToken cancellationToken)
+    public async Task<Result<AddUserProfileRequest>> AddAsync(AddUserProfileRequest request, CancellationToken cancellationToken)
     {
         var entity = new UserProfileEntity
         {
@@ -37,9 +37,14 @@ public class UserProfileService(IUnitOfWork uow) : IUserProfileService
             Email = request.Email,
         };
 
-        await uow.UserProfiles.AddAsync(entity, cancellationToken);
+        var result = await uow.UserProfiles.AddAsync(entity, cancellationToken);
+        if (!result.IsSuccess)
+        {
+            return Result<AddUserProfileRequest>.Failure(result.Errors!);
+        }
         await uow.SaveChangesAsync(cancellationToken);
-        return entity.Id;
+        
+        return Result<AddUserProfileRequest>.Success(request);
     }
 
     public async Task<Result> UpdateAsync(UpdateProfileRequest request, CancellationToken cancellationToken)

@@ -1,7 +1,7 @@
 using Application.Dtos;
 using Application.Dtos.Requests;
-using Application.Results;
 using Domain.Entities;
+using Domain.Results;
 
 namespace Application.Abstractions;
 

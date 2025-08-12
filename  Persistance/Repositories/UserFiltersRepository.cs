@@ -57,6 +57,7 @@ public class UserFiltersRepository(
     {
         logger.LogInformation("Streaming UserProfileEntities by specification");
         return ApplySpecification(specification)
+            .Include(f => f.Profile)
             .AsNoTracking()
             .AsAsyncEnumerable();
     }

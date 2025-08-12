@@ -1,6 +1,6 @@
 using Application.Dtos;
-using Application.Results;
 using Domain.Entities;
+using Domain.Results;
 
 namespace Application.Abstractions.AuthServiceClient;
 

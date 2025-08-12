@@ -2,10 +2,10 @@ using Application.Abstractions;
 using Application.Abstractions.AuthServiceClient;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Dtos;
-using Application.Results;
 using Application.Specifications;
 using Domain.Abstractions;
 using Domain.Entities;
+using Domain.Results;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services;

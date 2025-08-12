@@ -1,6 +1,6 @@
 using Application.Abstractions;
-using Application.Results;
 using Domain.Abstractions;
+using Domain.Results;
 using Microsoft.Extensions.Logging;
 
 namespace Application.Services;

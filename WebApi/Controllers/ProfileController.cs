@@ -29,8 +29,12 @@ public class UserProfileController(IUserProfileService userProfileService) : Con
     [HttpPost]
     public async Task<IActionResult> Add([FromBody] AddUserProfileRequest request, CancellationToken ct)
     {
-        var id = await userProfileService.AddAsync(request, ct);
-        return CreatedAtAction(nameof(GetById), new { id }, request);
+        var result = await userProfileService.AddAsync(request, ct);
+        
+        return result.IsSuccess 
+            ? CreatedAtAction(nameof(GetById), new { result.Value!.Id }, request)
+            : BadRequest(result.Errors);
+        
     }
 
     [HttpPut]

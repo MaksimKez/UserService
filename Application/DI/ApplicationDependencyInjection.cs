@@ -1,3 +1,4 @@
+using System.Reflection;
 using Application.Abstractions;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Services;
@@ -14,7 +15,7 @@ public static class ApplicationDependencyInjection
         services.AddScoped<IUserFilterNotificationService, UserFilterNotificationService>();
         services.AddScoped<IUserProfileService, UserProfileService>();
         
-        services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+        services.AddAutoMapper(Assembly.GetExecutingAssembly());
         
         return services;
     }
