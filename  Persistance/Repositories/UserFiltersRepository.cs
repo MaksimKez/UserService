@@ -56,10 +56,11 @@ public class UserFiltersRepository(
     public IAsyncEnumerable<UserFilterEntity> StreamAsync(ISpecification<UserFilterEntity> specification)
     {
         logger.LogInformation("Streaming UserProfileEntities by specification");
-        return ApplySpecification(specification)
+        var a=  ApplySpecification(specification)
             .Include(f => f.Profile)
             .AsNoTracking()
             .AsAsyncEnumerable();
+        return a;
     }
 
     private IQueryable<UserFilterEntity> ApplySpecification(ISpecification<UserFilterEntity> spec)
