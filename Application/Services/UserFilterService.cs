@@ -1,7 +1,7 @@
-using System.Security.AccessControl;
 using Application.Abstractions;
 using Application.Abstractions.AuthServiceClient;
 using Application.Dtos;
+using Application.Dtos.Requests;
 using Application.Results;
 using Application.Specifications;
 using Domain.Abstractions;
@@ -47,17 +47,36 @@ public class UserFilterService(
         return Result<List<UserFilterEntity>>.Success(entities);
     }
     
-    public async Task<Guid> AddAsync(UserFilterEntity entity)
+    public async Task<Guid> AddDefaultAsync(Guid userId, CancellationToken ct)
     {
+        var entity = UserFilterEntity.Default(userId);
         logger.LogInformation("Adding new UserFilterEntity with ProfileId {ProfileId}", entity.ProfileId);
-        await uow.UserFilters.AddAsync(entity, CancellationToken.None);
-        await uow.SaveChangesAsync();
+        await uow.UserFilters.AddAsync(entity, ct);
+        await uow.SaveChangesAsync(ct);
         return entity.Id;
     }
 
-    public async Task<Result> Update(UserFilterEntity entity)
+    public async Task<Result> Update(UpdateFilterRequest request)
     {
-        logger.LogInformation("Updating UserFilterEntity with Id {Id}", entity.Id);
+        logger.LogInformation("Updating UserFilterEntity with Id {Id}", request.Id);
+        var entity = new UserFilterEntity
+        {
+            Id = request.Id,
+            HasBalcony = request.HasBalcony,
+            HasAppliances = request.HasAppliances,
+            IsFurnished = request.IsFurnished,
+            MaxAreaMeterSqr = request.MaxAreaMeterSqr,
+            MaxFloor = request.MaxFloor,
+            MaxRooms = request.MaxRooms,
+            MaxPrice = request.MaxPrice,
+            MinFloor = request.MinFloor,
+            MinRooms = request.MinRooms,
+            MinPrice = request.MinPrice,
+            MinAreaMeterSqr = request.MinAreaMeterSqr,
+            PetsAllowed = request.PetsAllowed,
+            ProfileId = request.ProfileId,
+            NewerThanDays = request.NewerThanDays
+        };
         uow.UserFilters.Update(entity);
         await uow.SaveChangesAsync();
         return Result.Success();

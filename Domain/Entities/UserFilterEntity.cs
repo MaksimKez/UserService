@@ -25,4 +25,32 @@ public class UserFilterEntity
     public int? NewerThanDays { get; set; }
     
     public bool? HasAppliances { get; set; }
+
+    public static UserFilterEntity Default(Guid profileId)
+    {
+        return new UserFilterEntity
+        {
+            Id = Guid.NewGuid(),
+            ProfileId = profileId,
+        
+            MinPrice = null,
+            MaxPrice = null,
+
+            MinAreaMeterSqr = null,
+            MaxAreaMeterSqr = null,
+
+            MinRooms = null,
+            MaxRooms = null,
+
+            MinFloor = null,
+            MaxFloor = null,
+
+            IsFurnished = null,
+            PetsAllowed = null,
+            HasBalcony = null,
+        
+            NewerThanDays = null,
+            HasAppliances = null
+        };
+    }
 }

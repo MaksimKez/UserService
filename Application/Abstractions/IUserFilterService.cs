@@ -1,4 +1,5 @@
 using Application.Dtos;
+using Application.Dtos.Requests;
 using Application.Results;
 using Domain.Entities;
 
@@ -16,9 +17,9 @@ public interface IUserFilterService
     
     Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(List<ListingDto> matchingListings, CancellationToken cancellationToken = default);
     
-    Task<Guid> AddAsync(UserFilterEntity entity);
+    Task<Guid> AddDefaultAsync(Guid userId, CancellationToken cancellationToken = default);
 
-    Task<Result> Update(UserFilterEntity entity);
+    Task<Result> Update(UpdateFilterRequest entity);
 
     Task<Result> DeleteAsync(Guid id);
 }
