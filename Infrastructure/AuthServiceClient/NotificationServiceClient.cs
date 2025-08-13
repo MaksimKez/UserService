@@ -26,7 +26,7 @@ public class NotificationServiceClient : INotificationServiceClient
 
     private void Print(UserDto userDto)
     {
-        Console.WriteLine($"Name: {userDto.Name}");
-        Console.WriteLine($"Email: {userDto.Email}");
+        Console.WriteLine($"Name: {userDto.Name}", ConsoleColor.Green);
+        Console.WriteLine($"Email: {userDto.Email}", ConsoleColor.Green);
     }
 }

@@ -64,7 +64,7 @@ public class UserProfileRepository(UserServiceDbContext context, ILogger<UserPro
 
     public async Task<Result<UserProfileEntity>> AddAsync(UserProfileEntity entity, CancellationToken cancellationToken = default)
     {
-        var existingUser = await GetByIdAsync(entity.Id, cancellationToken);
+        var existingUser = await GetByEmailAsync(entity.Email, cancellationToken);
         if (existingUser != null)
         {
             return Result<UserProfileEntity>.Failure("User already exists");
