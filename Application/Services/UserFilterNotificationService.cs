@@ -64,6 +64,9 @@ public class UserFilterNotificationService(
             }
         }
 
+        Console.WriteLine("qwerqwerqwer");
+        Console.WriteLine("qwerqwerqwer");
+        Console.WriteLine("qwerqwerqwer");
         if (userToListing.Count == 0)
             return Result<Dictionary<Guid, string>>.Success(new Dictionary<Guid, string>());
 
@@ -78,18 +81,27 @@ public class UserFilterNotificationService(
             foreach (var user in userToListing.Keys)
             {
                 var filter = await uow.UserFilters.GetByProfileIdAsync(user.Id, ct);
+                
                 if (filter != null)
                     filter.Profile.LastNotifiedAt = DateTime.UtcNow;
             }
+
+            await uow.SaveChangesAsync(ct);
         }
 
         return await finalizer.FinalizeAsync(userToListing.Count, unnotifiedErrors, ct);
     }
 
-    private static bool CanNotify(UserFilterEntity filter) =>
-        !(filter.Profile.LastNotifiedAt.HasValue &&
-          filter.Profile.LastNotifiedAt > DateTime.UtcNow.AddHours(-1));
+    private static bool CanNotify(UserFilterEntity filter)
+    {
+        if (!filter.Profile.LastNotifiedAt.HasValue)
+        {
+            filter.Profile.LastNotifiedAt = DateTime.UtcNow;
+            return true;
+        }
 
+        return !(filter.Profile.LastNotifiedAt > DateTime.UtcNow.AddHours(-1));
+    }
     private static UserDto ToUserDto(UserFilterEntity filter) => new()
     {
         Id = filter.ProfileId,

@@ -17,7 +17,7 @@ public class UserFiltersRepository(
     public async Task<UserFilterEntity?> GetByProfileIdAsync(Guid id, CancellationToken cancellationToken)
     {
         logger.LogInformation("Getting UserFilterEntity by ProfileId {ProfileId}", id);
-        var entity = await filters.FirstOrDefaultAsync(filter => filter.ProfileId == id, cancellationToken);
+        var entity = await filters.Include(f => f.Profile).FirstOrDefaultAsync(filter => filter.ProfileId == id, cancellationToken);
         if (entity == null)
             logger.LogWarning("UserFilterEntity with ProfileId {ProfileId} not found", id);
         return entity;
@@ -49,6 +49,7 @@ public class UserFiltersRepository(
     {
         logger.LogInformation("Listing UserFilterEntities by specification");
         return await ApplySpecification(specification)
+            .Include(f => f.Profile)
             .AsNoTracking()
             .ToListAsync(cancellationToken);
     }

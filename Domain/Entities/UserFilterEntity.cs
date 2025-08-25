@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.JavaScript;
+
 namespace Domain.Entities;
 
 public class UserFilterEntity
@@ -33,24 +35,24 @@ public class UserFilterEntity
             Id = Guid.NewGuid(),
             ProfileId = profileId,
         
-            MinPrice = null,
-            MaxPrice = null,
+            MinPrice = 0,
+            MaxPrice = 10000000,
 
-            MinAreaMeterSqr = null,
-            MaxAreaMeterSqr = null,
+            MinAreaMeterSqr = 0,
+            MaxAreaMeterSqr = 10000000,
 
-            MinRooms = null,
-            MaxRooms = null,
+            MinRooms = 0,
+            MaxRooms = 100,
 
-            MinFloor = null,
-            MaxFloor = null,
+            MinFloor = 0,
+            MaxFloor = 100,
 
-            IsFurnished = null,
-            PetsAllowed = null,
-            HasBalcony = null,
+            IsFurnished = true,
+            PetsAllowed = true,
+            HasBalcony = true,
         
-            NewerThanDays = null,
-            HasAppliances = null
+            NewerThanDays = 7,
+            HasAppliances = true
         };
     }
 }

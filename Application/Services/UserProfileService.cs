@@ -6,7 +6,7 @@ using Domain.Results;
 
 namespace Application.Services;
 
-public class UserProfileService(IUnitOfWork uow) : IUserProfileService
+public class UserProfileService(IUnitOfWork uow, IUserFilterService filterService) : IUserProfileService
 {
     public async Task<Result<UserProfileEntity>> GetByIdAsync(Guid userId, CancellationToken cancellationToken)
     {
@@ -42,6 +42,9 @@ public class UserProfileService(IUnitOfWork uow) : IUserProfileService
         {
             return Result<AddUserProfileRequest>.Failure(result.Errors!);
         }
+
+        var filterId = await filterService.AddDefaultAsync(result.Value!.Id, cancellationToken);
+        
         await uow.SaveChangesAsync(cancellationToken);
         
         return Result<AddUserProfileRequest>.Success(request);
