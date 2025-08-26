@@ -16,6 +16,8 @@ public class NotificationServiceClient : INotificationServiceClient
 
     public async Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(Dictionary<UserDto, ListingDto> usersToListingDtos, CancellationToken cancellationToken = default)
     {
+        
+        //todo send UserListingPair
         foreach (var userToListingDto in usersToListingDtos)
         {
             Print(userToListingDto.Key);
