@@ -1,9 +1,13 @@
 using Application.DI;
+using Infrastructure.AuthServiceClient;
 using Infrastructure.DI;
 using Persistence;
 
 var builder = WebApplication.CreateBuilder(args);
 
+builder.Services.Configure<NotificationClientSettings>(
+                builder.Configuration.GetSection(NotificationClientSettings.SectionName));
+    
 builder.Services.AddPersistence(builder.Configuration);
 builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
