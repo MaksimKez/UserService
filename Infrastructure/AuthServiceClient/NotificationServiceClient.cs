@@ -26,13 +26,20 @@ public class NotificationServiceClient(
 
         try
         {
-            var notificationResult = await resiliencePipeline.ExecuteAsync(
+            var responseMessage = await resiliencePipeline.ExecuteAsync(
                 async _ => await notificationServiceApi.NotifySingle(pair),
                 ct);
+            
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return Result.Success();
+            }
 
-            ArgumentNullException.ThrowIfNull(notificationResult);
+            Console.WriteLine($"Error in NotifyUsersAsync: {(int)responseMessage.StatusCode}");
+            Console.WriteLine($"Error in NotifyUsersAsync: {responseMessage.ReasonPhrase}");
+            return Result.Failure(responseMessage.ReasonPhrase ?? "Unknown Error");
 
-            return ToResult(notificationResult);
+            
         }
         catch (ApiException apiEx)
         {
@@ -58,20 +65,18 @@ public class NotificationServiceClient(
 
         try
         {
-            var notificationResult = await resiliencePipeline.ExecuteAsync(
+            var responseMessage = await resiliencePipeline.ExecuteAsync(
                 async _ => await notificationServiceApi.NotifyMultiple(pairs),
                 cancellationToken);
 
-            if (notificationResult == null)
-                throw new ArgumentNullException(nameof(notificationResult));
+            if (responseMessage.IsSuccessStatusCode)
+            {
+                return Result<Dictionary<Guid, string>>.Success(new Dictionary<Guid, string>());
+            }
 
-            var dict = usersToListingDtos.ToDictionary(
-                kvp => kvp.Key.Id,
-                _ => notificationResult.IsSuccess
-                    ? "Success"
-                    : (notificationResult.Error ?? "Unknown error"));
-
-            return ToResult(notificationResult, dict);
+            Console.WriteLine($"Error in NotifyUsersAsync: {(int)responseMessage.StatusCode}");
+            Console.WriteLine($"Error in NotifyUsersAsync: {responseMessage.ReasonPhrase}");
+            return Result<Dictionary<Guid, string>>.Failure(responseMessage.ReasonPhrase ?? "Unknown Error");
         }
         catch (ApiException apiEx)
         {

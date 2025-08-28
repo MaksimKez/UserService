@@ -1,5 +1,6 @@
 using Application.Abstractions.NotificationServiceClient;
 using Infrastructure.AuthServiceClient;
+using Infrastructure.AuthServiceClient.Contracts.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Options;
 using Polly;
@@ -15,7 +16,7 @@ public static class InfrastructureDependencyInjection
 {
     public static IServiceCollection AddInfrastructure(this IServiceCollection services)
     {
-        services.AddRefitClient<INotificationServiceClient>()
+        services.AddRefitClient<INotificationServiceApi>()
             .ConfigureHttpClient((serviceProvider, httpClient) =>
             {
                 var settings = serviceProvider.GetRequiredService<IOptions<NotificationClientSettings>>().Value;
