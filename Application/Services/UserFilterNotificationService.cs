@@ -18,8 +18,6 @@ public class UserFilterNotificationService(
 {
     public async Task<Result<Dictionary<Guid, string>>> NotifyUsersAsync(ListingDto listing, CancellationToken ct)
     {
-        logger.LogInformation("Notify users for a single ListingDto using streaming");
-
         var notifiedUsers = new HashSet<Guid>();
         var unnotifiedErrors = new Dictionary<Guid, string>();
 
@@ -39,7 +37,7 @@ public class UserFilterNotificationService(
             if (result.IsSuccess)
                 filter.Profile.LastNotifiedAt = DateTime.UtcNow;
             else
-                LogError(unnotifiedErrors, filter.ProfileId, result);
+                LogErrorAndSaveToDictionary(unnotifiedErrors, filter.ProfileId, result);
         }
 
         return await finalizer.FinalizeAsync(notifiedUsers.Count, unnotifiedErrors, ct);
@@ -55,18 +53,12 @@ public class UserFilterNotificationService(
         {
             var filters = await uow.UserFilters.ListAsync(new FilterSpecification(listing), ct);
 
-            foreach (var filter in filters)
+            foreach (var filter in filters.Where(CanNotify))
             {
-                if (!CanNotify(filter))
-                    continue;
-
                 userToListing[ToUserDto(filter)] = listing;
             }
         }
 
-        Console.WriteLine("qwerqwerqwer");
-        Console.WriteLine("qwerqwerqwer");
-        Console.WriteLine("qwerqwerqwer");
         if (userToListing.Count == 0)
             return Result<Dictionary<Guid, string>>.Success(new Dictionary<Guid, string>());
 
@@ -111,7 +103,7 @@ public class UserFilterNotificationService(
         TelegramId = null
     };
 
-    private void LogError(Dictionary<Guid, string> errors, Guid profileId, Result result)
+    private void LogErrorAndSaveToDictionary(Dictionary<Guid, string> errors, Guid profileId, Result result)
     {
         var errorMsg = result.Errors?.FirstOrDefault() ?? "Unknown error";
         errors[profileId] = errorMsg;
