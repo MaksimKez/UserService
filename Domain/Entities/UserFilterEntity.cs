@@ -1,3 +1,5 @@
+using System.Runtime.InteropServices.JavaScript;
+
 namespace Domain.Entities;
 
 public class UserFilterEntity
@@ -25,4 +27,32 @@ public class UserFilterEntity
     public int? NewerThanDays { get; set; }
     
     public bool? HasAppliances { get; set; }
+
+    public static UserFilterEntity Default(Guid profileId)
+    {
+        return new UserFilterEntity
+        {
+            Id = Guid.NewGuid(),
+            ProfileId = profileId,
+        
+            MinPrice = 0,
+            MaxPrice = 10000000,
+
+            MinAreaMeterSqr = 0,
+            MaxAreaMeterSqr = 10000000,
+
+            MinRooms = 0,
+            MaxRooms = 100,
+
+            MinFloor = 0,
+            MaxFloor = 100,
+
+            IsFurnished = true,
+            PetsAllowed = true,
+            HasBalcony = true,
+        
+            NewerThanDays = 7,
+            HasAppliances = true
+        };
+    }
 }
