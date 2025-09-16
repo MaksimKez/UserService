@@ -25,11 +25,16 @@ public class UserFilterNotificationService(
             .WithCancellation(ct))
         {
             if (!CanNotify(filter))
+            {
+                logger.LogWarning("User was notified less than an hour ago");
                 continue;
-
+            }
+            
             if (!notifiedUsers.Add(filter.ProfileId))
+            {
+                logger.LogWarning("User is in notifiedUsers already");
                 continue;
-
+            }
             logger.LogInformation("Notifying user with profile id {id}", filter.ProfileId);
 
             var result = await notificationServiceClient.NotifyUserAsync(ToUserDto(filter), listing, ct);

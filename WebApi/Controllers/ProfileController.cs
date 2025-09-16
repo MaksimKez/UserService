@@ -1,12 +1,8 @@
 using Application.Abstractions;
 using Application.Dtos.Requests;
+using Microsoft.AspNetCore.Mvc;
 
 namespace WebApi.Controllers;
-
-using Microsoft.AspNetCore.Mvc;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
 [ApiController]
 [Route("api/[controller]")]
