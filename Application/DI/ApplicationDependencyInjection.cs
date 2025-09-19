@@ -2,6 +2,7 @@ using System.Reflection;
 using Application.Abstractions;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Services;
+using Application.Services.Interfaces;
 using Microsoft.Extensions.DependencyInjection;
 
 namespace Application.DI;

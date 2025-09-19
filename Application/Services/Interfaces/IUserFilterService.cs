@@ -3,7 +3,7 @@ using Application.Dtos.Requests;
 using Domain.Entities;
 using Domain.Results;
 
-namespace Application.Abstractions;
+namespace Application.Services.Interfaces;
 
 public interface IUserFilterService
 {
@@ -14,11 +14,3 @@ public interface IUserFilterService
     Task<Result> UpdateAsync(UpdateFilterRequest request, CancellationToken ct);
     Task<Result> DeleteAsync(Guid id, CancellationToken ct);
 }
-
-//get
-//set filters
-// parse gateway sends post (with listing filters)
-// -> user service finds matching filters (and users' ids)
-// -> user service sends post (with ids[]) to auth service
-// -> auth sends post to notification service (with emails/telegram ids [])
-// -> notification service notify users

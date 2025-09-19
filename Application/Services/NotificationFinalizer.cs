@@ -1,4 +1,5 @@
 using Application.Abstractions;
+using Application.Services.Interfaces;
 using Domain.Abstractions;
 using Domain.Results;
 using Microsoft.Extensions.Logging;

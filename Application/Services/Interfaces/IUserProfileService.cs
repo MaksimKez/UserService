@@ -2,7 +2,7 @@ using Application.Dtos.Requests;
 using Domain.Entities;
 using Domain.Results;
 
-namespace Application.Abstractions;
+namespace Application.Services.Interfaces;
 
 public interface IUserProfileService
 {

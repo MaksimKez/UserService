@@ -1,5 +1,6 @@
 using Application.Abstractions;
 using Application.Dtos.Requests;
+using Application.Services.Interfaces;
 using Domain.Abstractions;
 using Domain.Entities;
 using Domain.Results;

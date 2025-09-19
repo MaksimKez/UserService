@@ -2,6 +2,7 @@ using Application.Abstractions;
 using Application.Abstractions.NotificationServiceClient;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Dtos;
+using Application.Services.Interfaces;
 using Application.Specifications;
 using Domain.Abstractions;
 using Domain.Entities;

@@ -3,6 +3,7 @@ using Application.Dtos;
 using Application.Dtos.Requests;
 using Microsoft.AspNetCore.Mvc;
 using Application.Abstractions.UserFilterNotificationService;
+using Application.Services.Interfaces;
 
 namespace WebApi.Controllers;
 

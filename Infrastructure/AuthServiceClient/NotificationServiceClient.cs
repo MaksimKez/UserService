@@ -100,20 +100,6 @@ public class NotificationServiceClient(
                 : notificationResult.Error
             );
 
-    private static Result<Dictionary<Guid, string>> ToResult(NotificationResult notificationResult, Dictionary<Guid, string> value)
-        => new()
-        {
-            IsSuccess = notificationResult.IsSuccess,
-            Value = value,
-            Errors = notificationResult.IsSuccess
-                ? []
-                : [
-                    string.IsNullOrWhiteSpace(notificationResult.Error) 
-                    ? "Unknown error"
-                    : notificationResult.Error
-                ]
-        };
-
     private static string FormatApiError(ApiException apiEx)
     {
         var errorBody = apiEx.Content ?? string.Empty;

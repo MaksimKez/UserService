@@ -1,6 +1,6 @@
 using Domain.Results;
 
-namespace Application.Abstractions;
+namespace Application.Services.Interfaces;
 
 public interface INotificationFinalizer
 {

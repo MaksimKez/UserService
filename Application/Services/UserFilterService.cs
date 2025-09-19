@@ -1,6 +1,7 @@
 using Application.Abstractions;
 using Application.Dtos;
 using Application.Dtos.Requests;
+using Application.Services.Interfaces;
 using Application.Specifications;
 using AutoMapper;
 using Domain.Abstractions;
