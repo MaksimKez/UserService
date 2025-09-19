@@ -27,7 +27,38 @@ public class Result<TValue> where TValue : class
             Errors = null,
             Value = entity
         };
-    public static Result<TValue> PartialFailure(string[] errors, TValue value) => new Result<TValue> {Errors = errors, Value = value};
+    public static Result<TValue> PartialFailure(string[] errors, TValue value) => new() {Errors = errors, Value = value};
+}
+
+public class ResultValue<TValue> where TValue : struct
+{
+    public string[]? Errors { get; set; }
+    public bool IsSuccess { get; set; }
+    public TValue Value { get; set; }
+
+    public static ResultValue<TValue> Failure(string error) =>
+        new() {
+            Errors = [error],
+            IsSuccess = false,
+            Value = default
+        };
+    
+    public static ResultValue<TValue> Failure(string[] errors) =>
+        new() {
+            Errors = errors,
+            IsSuccess = false,
+            Value = default
+        };
+
+    public static ResultValue<TValue> Success(TValue entity) =>
+        new()
+        {
+            IsSuccess = true,
+            Errors = null,
+            Value = entity
+        };
+    public static ResultValue<TValue> PartialFailure(string[] errors, TValue value) => new() {Errors = errors, Value = value};
+
 }
 
 public class Result

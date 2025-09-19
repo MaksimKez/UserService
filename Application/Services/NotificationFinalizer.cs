@@ -5,9 +5,10 @@ using Microsoft.Extensions.Logging;
 
 namespace Application.Services;
 
-public class NotificationFinalizer(
-    IUnitOfWork uow,
-    ILogger<NotificationFinalizer> logger) : INotificationFinalizer
+public class NotificationFinalizer
+    (IUnitOfWork uow,
+    ILogger<NotificationFinalizer> logger)
+    : INotificationFinalizer
 {
     public async Task<Result<Dictionary<Guid, string>>> FinalizeAsync(
         int totalUsers,
@@ -26,6 +27,6 @@ public class NotificationFinalizer(
 
         logger.LogInformation("Notifications sent for {Count} users", totalUsers);
         await uow.SaveChangesAsync(ct);
-        return Result<Dictionary<Guid, string>>.Success(new());
+        return Result<Dictionary<Guid, string>>.Success(new Dictionary<Guid, string>());
     }
 }

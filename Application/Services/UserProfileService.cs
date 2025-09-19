@@ -24,7 +24,7 @@ public class UserProfileService(IUnitOfWork uow, IUserFilterService filterServic
             : Result<UserProfileEntity>.Success(entity);
     }
 
-    public async Task<Result<AddUserProfileRequest>> AddAsync(AddUserProfileRequest request, CancellationToken cancellationToken)
+    public async Task<ResultValue<Guid>> AddAsync(AddUserProfileRequest request, CancellationToken cancellationToken)
     {
         var entity = new UserProfileEntity
         {
@@ -40,14 +40,14 @@ public class UserProfileService(IUnitOfWork uow, IUserFilterService filterServic
         var result = await uow.UserProfiles.AddAsync(entity, cancellationToken);
         if (!result.IsSuccess)
         {
-            return Result<AddUserProfileRequest>.Failure(result.Errors!);
+            return ResultValue<Guid>.Failure(result.Errors!);
         }
 
         var filterId = await filterService.AddDefaultAsync(result.Value!.Id, cancellationToken);
         
         await uow.SaveChangesAsync(cancellationToken);
         
-        return Result<AddUserProfileRequest>.Success(request);
+        return ResultValue<Guid>.Success(filterId);
     }
 
     public async Task<Result> UpdateAsync(UpdateProfileRequest request, CancellationToken cancellationToken)
