@@ -1,7 +1,8 @@
+
 using Application.DI;
 using Infrastructure.AuthServiceClient;
 using Infrastructure.DI;
-using Persistence;
+using Persistence.DI;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -13,10 +14,20 @@ builder.Services.AddInfrastructure();
 builder.Services.AddApplication();
 builder.Services.AddControllers();
 
-// Add services to the container.
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("ReactLocalhost",
+        builder =>
+        {
+            builder.WithOrigins("http://localhost:3000")
+                .AllowAnyHeader()
+                .AllowAnyMethod()
+                .AllowCredentials();
+        });
+});
 
 builder.Services.AddControllers();
-// Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
+
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
@@ -32,7 +43,9 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
-app.UseHttpsRedirection();
+//app.UseHttpsRedirection();
+
+app.UseCors("ReactLocalhost");
 
 app.UseAuthorization();
 
