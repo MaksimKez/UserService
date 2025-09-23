@@ -1,15 +1,16 @@
 ﻿FROM mcr.microsoft.com/dotnet/aspnet:8.0 AS base
 WORKDIR /app
+RUN apt-get update && apt-get install -y \
+    libkrb5-3 \
+    libgssapi-krb5-2 \
+    && rm -rf /var/lib/apt/lists/*
 EXPOSE 8080
-RUN apt-get update && \
-    apt-get install -y libkrb5-3 && \
-    rm -rf /var/lib/apt/lists/*
 
 FROM mcr.microsoft.com/dotnet/sdk:8.0 AS build
 ARG BUILD_CONFIGURATION=Release
 WORKDIR /src
 COPY ["WebApi/WebApi.csproj", "WebApi/"]
-COPY ["Persistance/Persistence.csproj", "Persistance/"]
+COPY [" Persistance/Persistence.csproj", "Persistance/"]
 COPY ["Application/Application.csproj", "Application/"]
 COPY ["Domain/Domain.csproj", "Domain/"]
 COPY ["Infrastructure/Infrastructure.csproj", "Infrastructure/"]
