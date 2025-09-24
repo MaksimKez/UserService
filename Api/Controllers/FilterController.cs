@@ -5,7 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 using Application.Abstractions.UserFilterNotificationService;
 using Application.Services.Interfaces;
 
-namespace WebApi.Controllers;
+namespace Api.Controllers;
 
 [ApiController]
 [Route("api/[controller]")]
