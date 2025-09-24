@@ -12,7 +12,7 @@ public static class PersistenceDependencyInjection
     public static IServiceCollection AddPersistence(this IServiceCollection services, IConfiguration configuration)
     {
         services.AddDbContext<UserServiceDbContext>(op =>
-            op.UseSqlServer(configuration.GetConnectionString("DefaultConnection")));
+            op.UseNpgsql(configuration.GetConnectionString("DefaultConnection")));
         
         services.AddScoped<IUserFiltersRepository, UserFiltersRepository>();
         services.AddScoped<IUserProfileRepository, UserProfileRepository>();
